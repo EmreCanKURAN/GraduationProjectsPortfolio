@@ -23,7 +23,7 @@ This project is ideal for showcasing student work, academic portfolios, or any c
 1. **Clone the repository**:
    Open a terminal and use the following command to clone the project:
    ```bash
-   git clone https://github.com/your-username/your-repository-name.git
+   git clone https://github.com/EmreCanKURAN/GraduationProjectsPortfolio.git
    ```
 
    Alternatively, you can **download** the project as a ZIP file and extract it on your machine.

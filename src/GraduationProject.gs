@@ -1,3 +1,17 @@
+<!-- 
+  Programmed by Emre Can Kuran
+  Graduation Projects Showcase Web Application
+  Date: 2024-10
+  
+  This project is designed to dynamically showcase graduation projects from Google Drive,
+  with posters and videos organized by academic year. The frontend is built using HTML, 
+  Bootstrap, and JavaScript, while Google Apps Script handles backend operations such as 
+  fetching files from Google Drive.
+
+  For more information, visit: https://github.com/EmreCanKURAN/GraduationProjectsPortfolio
+-->
+
+
 class GraduationProjectManager {
   // Constructor to initialize the manager with the Google Drive folder ID.
   constructor(folderId) {

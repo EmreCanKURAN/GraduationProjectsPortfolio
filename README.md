@@ -38,24 +38,14 @@ This project is ideal for showcasing student work, academic portfolios, or any c
 
 ### Step 3: Set Up Google Drive Folder
 1. **Create a main folder in Google Drive**:
-   - Organize your projects by year, with each year having its own subfolders for `Posterler` (Posters) and `Videolar` (Videos).
+   - Organize your projects by year, with each year having its own subfolders for `Posterler` (Posters) and `Videolar` (Videos). Set necessary sharing permissions.
    
 2. **Copy the Google Drive folder ID**:
    - In Google Drive, open your main folder.
    - From the URL, copy the folder ID (the long string after `/folders/`).
    - Paste this ID in the constructor of the `GraduationProjectManager` class in "Code.gs" script.
 
-### Step 4: Set Permissions
-1. **Enable Google Drive API**:
-   - In Google Apps Script, go to `Resources` > `Advanced Google Services`.
-   - Enable the **Google Drive API** by toggling the switch to ON.
-   - Click on `Google Cloud Platform` and enable the Drive API in the Cloud Console.
-
-2. **Update project permissions**:
-   - In the Apps Script editor, go to `File` > `Project Properties`.
-   - Click on `Scopes` and ensure that you have permission to access Google Drive files.
-
-### Step 5: Set Up HTML Interface
+### Step 4: Set Up HTML Interface
 1. **Copy HTML content**:
    - Open the `index.html` file in the repository and paste the contents into a new HTML file within your Apps Script project.
 
@@ -67,15 +57,15 @@ This project is ideal for showcasing student work, academic portfolios, or any c
      <iframe src="https://script.google.com/macros/s/your-deployment-id/exec" width="100%" height="800px"></iframe>
      ```
 
-### Step 6: Deployment
+### Step 5: Deployment
 1. **Deploy the project**:
-   - In Google Apps Script, go to `Deploy` > `Test Deployments` > `Deploy as web app`.
+   - In Google Apps Script, go to `Deploy` > `Select Type` > `Deploy as web app`.
    - Set access to `Anyone, even anonymous` if the project is publicly accessible.
    
 2. **Copy the web app URL**:
    - Use the provided URL to embed the app into your university webpage or share it directly with users.
 
-### Step 7: Testing and Usage
+### Step 6: Testing and Usage
 1. **Load the app**:
    - Once embedded, the app will display available academic years and showcase graduation projects.
    - Users can scroll through the projects and view details, posters, and videos dynamically.

@@ -1,4 +1,4 @@
-<!-- 
+/*
   Programmed by Emre Can Kuran
   Graduation Projects Showcase Web Application
   Date: 2024-10
@@ -9,7 +9,7 @@
   fetching files from Google Drive.
 
   For more information, visit: https://github.com/EmreCanKURAN/GraduationProjectsPortfolio
--->
+*/
 
 
 class GraduationProjectManager {

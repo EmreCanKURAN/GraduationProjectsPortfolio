@@ -34,6 +34,7 @@ This project is ideal for showcasing student work, academic portfolios, or any c
    
 2. **Copy script files**:
    - Open the `Code.gs` file from the repository and paste the contents into your new Google Apps Script project.
+   - Open the `GraduationProject.gs` file from the repository and paste the contents into your new Google Apps Script project.
 
 ### Step 3: Set Up Google Drive Folder
 1. **Create a main folder in Google Drive**:
@@ -42,7 +43,7 @@ This project is ideal for showcasing student work, academic portfolios, or any c
 2. **Copy the Google Drive folder ID**:
    - In Google Drive, open your main folder.
    - From the URL, copy the folder ID (the long string after `/folders/`).
-   - Paste this ID in the constructor of the `GraduationProjectManager` class in the script.
+   - Paste this ID in the constructor of the `GraduationProjectManager` class in "Code.gs" script.
 
 ### Step 4: Set Permissions
 1. **Enable Google Drive API**:

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bitirme Projeleri</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #e9f4fb;
+      margin: 20px;
+    }
+
+    h1 {
+      color: #0c4b96;
+      font-size: 3rem;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      background-color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #343a40;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .content-label {
+      font-size: 1.2rem;
+      color: #ffffff;
+      background-color: #0c4b96;
+      padding: 10px;
+      margin-top: 15px;
+      margin-bottom: 10px;
+      width:100%;
+      text-align: center;
+      border-radius: 5px;
+      display: inline-block;
+    }
+
+    .poster,
+    .video-embed {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .poster:hover,
+    .video-embed:hover {
+      transform: scale(1.03);
+    }
+
+    .enlarge-icon {
+      font-size: 32px;
+      color: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #loadingSpinner {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      display: none;
+      width: 50px;
+      height: 50px;
+      border: 6px solid rgba(0, 0, 255, 0.2);
+      border-top-color: #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    #yearSelector {
+      opacity: 0;
+      transition: opacity 0.5s ease-in;
+    }
+
+    #yearSelector.loaded {
+      opacity: 1;
+    }
+
+    .video-preview-container {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+      height: 300px;
+      overflow: hidden;
+      cursor: pointer;
+      border-radius: 12px;
+      border: 1px solid #dee2e6;
+    }
+
+    .video-play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-play-button::before {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-left: 18px solid white;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+    }
+
+    .btn-custom {
+      background-color: #0c4b96;
+      color: white;
+      font-size: 1rem;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+      display: inline-block;
+    }
+
+    .btn-custom:hover {
+      background-color: #083a73;
+      color: white;
+    }
+
+    #bottomLoadingSpinner {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #bottomLoadingSpinner .spinner-border {
+      color: #0c4b96;
+    }
+  </style>
+</head>
+<body>
+  <div id="loadingSpinner"></div>
+
+  <div class="container">
+    <!-- Year Selection Toolbar -->
+  <div class="toolbar">
+    <!-- Year Selection Toolbar with fade-in animation -->
+    <select id="yearSelector" class="form-select w-25"></select>
+  </div>
+
+
+    <h1 class="text-center my-5">Bitirme Projeleri</h1>
+    <div id="content" class="row g-3"></div>
+  </div>
+
+  <!-- Modal for Viewing Posters/Videos -->
+  <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="previewModalLabel">Preview</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="modalContent" class="text-center"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="bottomLoadingSpinner" class="text-center my-3" style="display: none;">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let batchStart = 0;
+    const batchLimit = 3;
+    let isLoading = false;
+    let allProjectsLoaded = false;
+    let currentYear = ""; // Dynamically set from available years
+
+    function showLoadingSpinner() {
+      document.getElementById("loadingSpinner").style.display = "block";
+    }
+    function showBottomLoadingSpinner() {
+      document.getElementById("bottomLoadingSpinner").style.display = "block";
+    }
+
+    function hideBottomLoadingSpinner() {
+      document.getElementById("bottomLoadingSpinner").style.display = "none";
+    }
+
+    function toTitleCase(str) {
+      return str.replace(/\.[^/.]+$/, "").toLowerCase().split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+    }
+
+    function hideLoadingSpinner() {
+      document.getElementById("loadingSpinner").style.display = "none";
+    }
+
+    function getVideoPreviewUrl(fileId) {
+      return 'https://drive.google.com/thumbnail?id=' + fileId;
+    }
+
+    function getPDFPreviewUrl(fileId) {
+      return 'https://drive.google.com/file/d/' + fileId + '/preview';
+    }
+
+    function clearContent() {
+      const contentDiv = document.getElementById("content");
+      contentDiv.innerHTML = ""; // Clear existing content
+      batchStart = 0; // Reset batch start
+      allProjectsLoaded = false; // Reset the flag
+    }
+
+    function displayProjects(year) {
+      if (isLoading || allProjectsLoaded) return;
+
+      isLoading = true;
+      showBottomLoadingSpinner(); // Show bottom spinner when loading more content
+
+      google.script.run.withSuccessHandler(function (projects) {
+        if (projects.length === 0) {
+          allProjectsLoaded = true;
+          hideBottomLoadingSpinner();
+          isLoading = false;
+          return;
+        }
+
+        const contentDiv = document.getElementById("content");
+
+        projects.forEach(project => {
+          const projectCol = document.createElement("div");
+          projectCol.classList.add("col-12");
+
+          const card = document.createElement("div");
+          card.classList.add("card", "shadow-sm", "h-100");
+
+          const cardBody = document.createElement("div");
+          cardBody.classList.add("card-body");
+
+          const projectTitle = document.createElement("h5");
+          projectTitle.classList.add("card-title");
+          projectTitle.textContent = toTitleCase(project.name);
+          cardBody.appendChild(projectTitle);
+
+          // Handle Poster Display
+          if (project.posterUrl) {
+            const imLabel = document.createElement("div");
+            imLabel.classList.add("content-label");
+            imLabel.textContent = "Poster";
+            cardBody.appendChild(imLabel);
+
+            if (project.fileType === "application/pdf") {
+              const pdfPreviewElement = document.createElement("div");
+              pdfPreviewElement.classList.add("poster");
+              pdfPreviewElement.style.position = "relative";
+              pdfPreviewElement.style.cursor = "pointer";
+
+              const iframe = document.createElement("iframe");
+              const fileId = project.posterUrl.match(/[-\w]{25,}/)[0];
+              iframe.src = getPDFPreviewUrl(fileId);
+              iframe.width = "100%";
+              iframe.height = "200px";
+              iframe.style.border = "none";
+              iframe.classList.add("poster");
+
+              const enlargeButton = document.createElement("div");
+              enlargeButton.classList.add("enlarge-icon");
+              enlargeButton.style.position = "absolute";
+              enlargeButton.style.top = "50%";
+              enlargeButton.style.left = "50%";
+              enlargeButton.style.transform = "translate(-50%, -50%)";
+
+              pdfPreviewElement.appendChild(iframe);
+              pdfPreviewElement.appendChild(enlargeButton);
+              pdfPreviewElement.onclick = () => openModal(project.posterUrl, "pdf");
+
+              cardBody.appendChild(pdfPreviewElement);
+            } else {
+              const posterContainer = document.createElement("div");
+              posterContainer.style.position = "relative";
+              posterContainer.style.cursor = "pointer";
+
+              const posterElement = document.createElement("img");
+              posterElement.src = project.posterUrl.thumbnail;
+              posterElement.classList.add("poster");
+              posterElement.loading = "lazy";
+
+              const enlargeButton = document.createElement("i");
+              enlargeButton.classList.add("fas", "fa-search-plus", "enlarge-icon");
+
+              posterElement.setAttribute("data-full-image", project.posterUrl.fullImage);
+              posterContainer.onclick = () => {
+                const fullImageUrl = posterElement.getAttribute("data-full-image");
+                if (fullImageUrl) {
+                  openModal(fullImageUrl, "image");
+                }
+              };
+
+              posterContainer.appendChild(posterElement);
+              posterContainer.appendChild(enlargeButton);
+              cardBody.appendChild(posterContainer);
+            }
+          }
+
+          // Space between Poster and Video
+          const spacer = document.createElement("div");
+          spacer.style.height = "15px";
+          cardBody.appendChild(spacer);
+
+          // Handle Video Display
+          if (project.videoUrl) {
+            const videoLabel = document.createElement("div");
+            videoLabel.classList.add("content-label");
+            videoLabel.textContent = "Video";
+            cardBody.appendChild(videoLabel);
+
+            const videoContainer = document.createElement("div");
+            videoContainer.classList.add("video-preview-container");
+
+            const videoThumb = document.createElement("img");
+            videoThumb.src = project.videoUrl.thumbnail;
+            videoThumb.classList.add("poster");
+            videoThumb.loading = "lazy";
+
+            const playButton = document.createElement("div");
+            playButton.classList.add("video-play-button");
+
+            videoContainer.appendChild(videoThumb);
+            videoContainer.appendChild(playButton);
+            videoContainer.onclick = () => loadVideoInModal(project.videoUrl.preview);
+
+            cardBody.appendChild(videoContainer);
+          }
+
+          card.appendChild(cardBody);
+          projectCol.appendChild(card);
+          contentDiv.appendChild(projectCol);
+        });
+
+        batchStart += batchLimit;
+        hideBottomLoadingSpinner(); // Hide bottom spinner after content is loaded
+        isLoading = false;
+      }).getProjectsForYear(year, batchStart, batchLimit);
+    }
+
+    function loadVideoInModal(videoUrl) {
+      const modalContent = document.getElementById("modalContent");
+      modalContent.innerHTML = "";
+
+      const iframe = document.createElement("iframe");
+      iframe.src = videoUrl;
+      iframe.width = "100%";
+      iframe.height = "500px";
+      iframe.frameBorder = "0";
+      iframe.allowFullscreen = true;
+
+      modalContent.appendChild(iframe);
+
+      const modal = new bootstrap.Modal(document.getElementById('previewModal'));
+      modal.show();
+    }
+
+    function openModal(url, type) {
+      const modalContent = document.getElementById("modalContent");
+      modalContent.innerHTML = "";
+
+      if (type === "image") {
+        const iframe = document.createElement("iframe");
+        iframe.src = url;
+        iframe.width = "100%";
+        iframe.height = "700px";
+        iframe.frameBorder = "0";
+        modalContent.appendChild(iframe);
+      } else if (type === "pdf") {
+        const iframe = document.createElement("iframe");
+        iframe.src = getPDFPreviewUrl(url.match(/[-\w]{25,}/)[0]);
+        iframe.width = "100%";
+        iframe.height = "700px";
+        iframe.frameBorder = "0";
+        modalContent.appendChild(iframe);
+      }
+
+      const modal = new bootstrap.Modal(document.getElementById('previewModal'));
+      modal.show();
+    }
+
+    // Fetch available years dynamically with fade-in effect
+    function loadAvailableYears() {
+      const yearSelector = document.getElementById('yearSelector');
+      yearSelector.disabled = true; // Disable the select while loading
+
+      google.script.run.withSuccessHandler(function (years) {
+        years.forEach(function (year) {
+          const option = document.createElement('option');
+          option.value = year;
+          option.textContent = year;
+          yearSelector.appendChild(option);
+        });
+
+        // Select the first year by default and load projects
+        currentYear = years[0];
+        yearSelector.disabled = false; // Enable the select after loading
+
+        // Add the "loaded" class to trigger the fade-in effect
+        yearSelector.classList.add("loaded");
+
+        // Display the projects for the selected year
+        displayProjects(currentYear);
+      }).getAvailableYears();
+    }
+
+    // Year selection change event
+    document.getElementById('yearSelector').addEventListener('change', function () {
+      const selectedYear = this.value;
+      currentYear = selectedYear;
+      clearContent();
+      displayProjects(currentYear);
+    });
+
+    document.getElementById('previewModal').addEventListener('hidden.bs.modal', function () {
+      document.getElementById("modalContent").innerHTML = "";
+    });
+    // Infinite scroll logic
+    window.onscroll = function () {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight && !isLoading) {
+        displayProjects(currentYear);
+      }
+    };
+    // Initialize the page
+    window.onload = function () {
+      loadAvailableYears(); // Load available years on page load
+    };
+  </script>
+</body>
+</html>

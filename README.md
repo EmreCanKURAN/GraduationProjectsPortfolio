@@ -11,6 +11,9 @@ This project provides a dynamic and elegant way to display university graduation
   
 This project is ideal for showcasing student work, academic portfolios, or any collection of multimedia projects. It is designed to be embedded easily into any university website or portfolio page.
 
+A more advanced demo of the project developed by me:
+https://script.google.com/macros/s/AKfycbz2L7uUU8rEwgGoMvJL9ae6G0nbL1XuuW7ZyzzsDF9MfPIFkL1VPDYon3sf_Ulg_00/exec
+
 ## Technologies Used:
 - **Google Apps Script**: Backend logic to fetch project data from Google Drive.
 - **HTML/CSS/JavaScript**: Frontend for displaying project information.
